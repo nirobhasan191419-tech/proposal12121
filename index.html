@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>পরবর্তী জীবনের সোপ থেকে বড় একটা প্রশ্ন 💗</title>
+  <style>
+    :root{
+      --bg1:#090a14;
+      --bg2:#150b2c;
+      --card: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.14);
+      --text: #f3f6ff;
+      --muted: rgba(243,246,255,.78);
+      --yes1:#22c55e;
+      --yes2:#16a34a;
+      --no1:#ff4d6d;
+      --no2:#7c3aed;
+      --radius:22px;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(124,58,237,.55), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(255,77,109,.50), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+    .center{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:18px;
+    }
+    .card{
+      width:min(680px, 96vw);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:20px;
+      position:relative;
+      overflow:hidden;
+    }
+    .tag{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--no1);box-shadow:0 0 18px rgba(255,77,109,.75)}
+    h1{
+      margin:14px 0 6px;
+      font-size: clamp(22px, 3.6vw, 36px);
+      letter-spacing:.2px;
+      line-height:1.12;
+    }
+    p{margin:0 0 14px; color:var(--muted); line-height:1.55}
+    .bigq{
+      margin-top:14px;
+      padding:16px;
+      border-radius:18px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .question{
+      font-weight:900;
+      font-size:18px;
+      margin:0 0 10px;
+    }
+    .row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      align-items:center;
+      justify-content:flex-start;
+    }
+    button{
+      border:0;
+      cursor:pointer;
+      border-radius:16px;
+      padding:14px 16px;
+      font-weight:950;
+      font-size:15px;
+      color:#fff;
+      box-shadow: 0 14px 30px rgba(0,0,0,.30);
+      transition: transform .08s ease, filter .2s ease, opacity .2s ease;
+      user-select:none;
+      touch-action:manipulation;
+      min-width: 150px;
+    }
+    button:active{transform:scale(.98)}
+    #yesBtn{
+      background: linear-gradient(135deg, rgba(34,197,94,.98), rgba(22,163,74,.75));
+    }
+    #noBtn{
+      position:relative;
+      background: linear-gradient(135deg, rgba(255,77,109,.98), rgba(124,58,237,.78));
+    }
+    .hint{
+      font-size:12px;
+      opacity:.72;
+      margin-top:10px;
+    }
+    /* small "serious no" link (optional) */
+    .seriousNo{
+      position:absolute;
+      right:14px;
+      top:14px;
+      font-size:12px;
+      color: rgba(243,246,255,.75);
+      text-decoration: underline;
+      cursor:pointer;
+      user-select:none;
+    }
+    .seriousNo:hover{opacity:.95}
+
+    /* Celebration overlay */
+    #celebrate{
+      position:fixed;
+      inset:0;
+      display:none;
+      background:#000;
+      z-index:50;
+    }
+    #fw{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+    #celebrateText{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      text-align:center;
+      width:min(720px,92vw);
+      color:#fff;
+      pointer-events:none;
+      text-shadow: 0 20px 60px rgba(0,0,0,.75);
+      opacity:0;
+      transition: opacity .6s ease;
+    }
+    #celebrateText h2{
+      margin:0 0 6px;
+      font-size: clamp(24px, 4.2vw, 48px);
+      letter-spacing:.3px;
+    }
+    #celebrateText p{margin:0; opacity:.85}
+
+    /* Final letter screen */
+    #final{
+      position:fixed;
+      inset:0;
+      display:none;
+      z-index:60;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(124,58,237,.35), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(255,77,109,.30), transparent 60%),
+        linear-gradient(135deg, #050610, #120827);
+      overflow:auto;
+      padding:18px;
+    }
+    .letter{
+      width:min(760px, 96vw);
+      margin: 24px auto;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 26px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.55);
+      padding: 22px;
+      position:relative;
+    }
+    .heart{
+      display:inline-block;
+      animation: beat .9s infinite;
+      transform-origin:center;
+      filter: drop-shadow(0 10px 18px rgba(255,77,109,.35));
+    }
+    @keyframes beat {0%,100%{transform:scale(1)} 50%{transform:scale(1.14)}}
+    .letter h2{
+      margin: 0 0 6px;
+      font-size: clamp(22px, 3.8vw, 34px);
+      line-height:1.2;
+    }
+    .letter .meta{
+      color: rgba(243,246,255,.75);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .letter .body{
+      color: rgba(243,246,255,.92);
+      line-height:1.75;
+      font-size: 16px;
+      white-space: pre-wrap;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .pill{
+      display:inline-block;
+      padding:10px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(243,246,255,.86);
+      font-size:13px;
+      user-select:none;
+      cursor:pointer;
+    }
+    .pill:active{transform:scale(.99)}
+    .smallnote{
+      font-size:12px;
+      opacity:.7;
+      margin-top:10px;
+      line-height:1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Proposal Screen -->
+  <div class="center" id="screen1">
+    <div class="card" id="card">
+      <div class="seriousNo" id="seriousNo">No (seriously)</div>
+
+      <div class="tag"><span ></span></div>
+      <h1 id="title">Hey <span id="crushName">তোমার-নাম</span>… <span class="heart">💗</span></h1>
+      <p id="subtitle">একটা কথা অনেকদিন ধরে বলতে চাই… আজ বলেই ফেলি 🙂</p>
+
+      <div class="bigq">
+        <div class="question" id="questionText">Will you be mine?</div>
+        <p id="teaseText">সত্যি করে উত্তর দাও… 😄</p>
+
+        <div class="row">
+          <button id="yesBtn">Yes ✅</button>
+          <button id="noBtn">No 🙈</button>
+        </div>
+
+        <div class="hint" id="hint">Tip: “No” বাটনটা একটু দুষ্টু 😅</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration -->
+  <div id="celebrate">
+    <canvas id="fw"></canvas>
+    <div id="celebrateText">
+      <h2>Yaaay! 🎆</h2>
+      <p>তুমি “Yes” বলেছো… এইটা আমার জীবনের সবচেয়ে সুন্দর মুহূর্ত!</p>
+    </div>
+  </div>
+
+  <!-- Final Letter -->
+  <div id="final">
+    <div class="letter">
+      <h2 id="finalTitle">To <span id="finalCrush">তোমার-নাম</span> 💌</h2>
+      <div class="meta" id="finalMeta">From: <span id="myName">আমার-নাম</span> • Always yours</div>
+
+      <div class="body" id="letterBody">এখানে তোমার লেখা (love letter) থাকবে…</div>
+
+      <div class="actions">
+        <div class="pill" id="copyBtn">📩 Copy message</div>
+        <div class="pill" id="restartBtn">🔁 Start again</div>
+      </div>
+
+      <div class="smallnote">
+        ✍️ Name/Letter বদলাতে নিচের JS-এর “CUSTOMIZE” অংশে শুধু টেক্সট বদলাও।  
+        🔊 চাইলে celebration/caught soundও যোগ করে দিতে পারি।
+      </div>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   ✅ CUSTOMIZE HERE (EDIT)
+   ========================= */
+const CONFIG = {
+  crushName: "Ayesha",     // <-- এখানে তার নাম/নিকনেম
+  myName: "Rahim",         // <-- এখানে তোমার নাম/নিকনেম
+
+  proposalTitle: "Hey {crush}… 💗",
+  proposalSubtitle: "একটা কথা অনেকদিন ধরে বলতে চাই… আজ বলেই ফেলি 🙂",
+  proposalQuestion: "Will you be mine?",
+
+  // "No" বাটনের লেখা বদলাবে
+  noPhrases: [
+    "No 🙈",
+    "সত্যি? 😭",
+    "ভাবো তো… 😅",
+    "তুমি sure? 🥺",
+    "একবার Yes বলো না 💗",
+    "আমি হার মানবো না 😤",
+    "জোক করছো তো? 😂",
+    "আরে প্লিজ 😇",
+    "শেষবারের মতো… 🙏",
+    "Yes টা চাপো 😌"
+  ],
+
+  teaseLines: [
+    "সত্যি করে উত্তর দাও… 😄",
+    "আমি nervous 😳",
+    "তুমি ‘No’ বলবে নাকি? 😅",
+    "একটু মিষ্টি করে বলো 😌",
+    "তোমার হাসিটাই আমার শক্তি 💗"
+    
+  ],
+
+  // fireworks duration (ms)
+  celebrationMs: 5200,
+
+  // Final love letter text
+  loveLetter:
+`তোমাকে প্রথম দেখার পর থেকেই একটা আলাদা অনুভূতি কাজ করে…
+তোমার কথা, তোমার হাসি—সবকিছুই আমার কাছে বিশেষ।
+
+আমি “perfect” না, কিন্তু তোমার পাশে থাকার চেষ্টা আমি সবসময় করবো।
+আজ শুধু এটুকুই জানতে চাই—
+তুমি কি আমার জীবনের গল্পে তোমার নামটা লিখবে? 💗
+
+— {me}`
+};
+
+// 🔒 If you want to REMOVE the "No (seriously)" option, set this true:
+const HIDE_SERIOUS_NO = false;
+
+/* =========================
+   App logic
+   ========================= */
+const crushNameEl = document.getElementById("crushName");
+const myNameEl = document.getElementById("myName");
+const finalCrushEl = document.getElementById("finalCrush");
+const titleEl = document.getElementById("title");
+const subtitleEl = document.getElementById("subtitle");
+const questionEl = document.getElementById("questionText");
+const teaseEl = document.getElementById("teaseText");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const seriousNo = document.getElementById("seriousNo");
+const final = document.getElementById("final");
+const celebrate = document.getElementById("celebrate");
+const celebrateText = document.getElementById("celebrateText");
+const letterBody = document.getElementById("letterBody");
+const copyBtn = document.getElementById("copyBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+
+function format(str){
+  return str
+    .replaceAll("{crush}", CONFIG.crushName)
+    .replaceAll("{me}", CONFIG.myName);
+}
+
+crushNameEl.textContent = CONFIG.crushName;
+finalCrushEl.textContent = CONFIG.crushName;
+myNameEl.textContent = CONFIG.myName;
+
+titleEl.innerHTML = format(CONFIG.proposalTitle);
+subtitleEl.textContent = CONFIG.proposalSubtitle;
+questionEl.textContent = CONFIG.proposalQuestion;
+letterBody.textContent = format(CONFIG.loveLetter);
+
+if(HIDE_SERIOUS_NO){
+  seriousNo.style.display = "none";
+}
+
+let noIndex = 0;
+let teaseIndex = 0;
+
+// Make "No" button dodge
+function moveNoButton(){
+  const card = document.getElementById("card");
+  const rect = card.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+
+  // Keep inside card area
+  const pad = 14;
+  const maxX = rect.width - btnRect.width - pad;
+  const maxY = rect.height - btnRect.height - pad;
+
+  // Random position but avoid too close to Yes button
+  let x, y, tries=0;
+  do{
+    x = pad + Math.random() * (maxX - pad);
+    y = 90 + Math.random() * (maxY - 90); // avoid top tag area
+    tries++;
+  } while(tries < 10 && nearYes(x,y,rect));
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top  = y + "px";
+}
+
+function nearYes(x,y,cardRect){
+  const yesRect = yesBtn.getBoundingClientRect();
+  // rough: if new position would overlap the Yes button region
+  const localYesX = yesRect.left - cardRect.left;
+  const localYesY = yesRect.top - cardRect.top;
+  const dx = x - localYesX;
+  const dy = y - localYesY;
+  return (dx*dx + dy*dy) < 180*180;
+}
+
+function updateNoText(){
+  noIndex = Math.min(noIndex + 1, CONFIG.noPhrases.length - 1);
+  noBtn.textContent = CONFIG.noPhrases[noIndex];
+}
+
+function updateTease(){
+  teaseIndex = (teaseIndex + 1) % CONFIG.teaseLines.length;
+  teaseEl.textContent = CONFIG.teaseLines[teaseIndex];
+}
+
+// Touch-friendly: move on hover/focus/attempt
+noBtn.addEventListener("mouseenter", ()=>{ moveNoButton(); updateTease(); });
+noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveNoButton(); updateNoText(); updateTease(); }, {passive:false});
+noBtn.addEventListener("click", (e)=>{ e.preventDefault(); moveNoButton(); updateNoText(); updateTease(); });
+
+// "No (seriously)" option
+seriousNo.addEventListener("click", ()=>{
+  // Gentle exit message
+  const msg = `No worries 🙂\nThank you for being honest.\n— ${CONFIG.myName}`;
+  alert(msg);
+});
+
+// YES flow
+yesBtn.addEventListener("click", ()=>{
+  startCelebration();
+});
+
+// Copy letter
+copyBtn.addEventListener("click", async ()=>{
+  const text = format(CONFIG.loveLetter);
+  try{
+    await navigator.clipboard.writeText(text);
+    copyBtn.textContent = "✅ Copied!";
+    setTimeout(()=> copyBtn.textContent = "📩 Copy message", 1400);
+  }catch(e){
+    alert("Copy কাজ করছে না—manual copy করো 🙂");
+  }
+});
+
+restartBtn.addEventListener("click", ()=>{
+  location.reload();
+});
+
+/* =========================
+   Fireworks (Canvas)
+   ========================= */
+const canvas = document.getElementById("fw");
+const ctx = canvas.getContext("2d");
+let W=0, H=0;
+let particles = [];
+let fireworks = [];
+let running = false;
+
+function resize(){
+  W = canvas.width = window.innerWidth * devicePixelRatio;
+  H = canvas.height = window.innerHeight * devicePixelRatio;
+  ctx.setTransform(1,0,0,1,0,0);
+}
+window.addEventListener("resize", resize);
+
+function rand(min,max){ return min + Math.random()*(max-min); }
+
+function launchFirework(){
+  const x = rand(W*0.15, W*0.85);
+  fireworks.push({
+    x, y:H,
+    vx: rand(-1.2, 1.2) * devicePixelRatio,
+    vy: rand(-18, -13) * devicePixelRatio,
+    life: 0,
+    targetY: rand(H*0.18, H*0.55)
+  });
+}
+
+function explode(x,y){
+  const count = Math.floor(rand(60, 110));
+  for(let i=0;i<count;i++){
+    const ang = rand(0, Math.PI*2);
+    const sp  = rand(2.2, 6.5) * devicePixelRatio;
+    particles.push({
+      x,y,
+      vx: Math.cos(ang)*sp,
+      vy: Math.sin(ang)*sp,
+      g: 0.10 * devicePixelRatio,
+      life: rand(42, 78),
+      alpha: 1,
+      // random bright color
+      r: Math.floor(rand(140,255)),
+      gcol: Math.floor(rand(80,255)),
+      b: Math.floor(rand(140,255))
+    });
+  }
+}
+
+function step(){
+  if(!running) return;
+
+  // fade background
+  ctx.fillStyle = "rgba(0,0,0,0.18)";
+  ctx.fillRect(0,0,W,H);
+
+  // launch sometimes
+  if(Math.random() < 0.10) launchFirework();
+
+  // update fireworks
+  for(let i=fireworks.length-1;i>=0;i--){
+    const f = fireworks[i];
+    f.x += f.vx;
+    f.y += f.vy;
+    f.vy += 0.25 * devicePixelRatio;
+    f.life++;
+
+    // draw trail dot
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, 1.7*devicePixelRatio, 0, Math.PI*2);
+    ctx.fill();
+
+    if(f.y <= f.targetY || f.life > 90){
+      explode(f.x, f.y);
+      fireworks.splice(i,1);
+    }
+  }
+
+  // update particles
+  for(let i=particles.length-1;i>=0;i--){
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.g;
+    p.life -= 1;
+    p.alpha = Math.max(0, p.life/78);
+
+    ctx.fillStyle = `rgba(${p.r},${p.gcol},${p.b},${p.alpha})`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 1.9*devicePixelRatio, 0, Math.PI*2);
+    ctx.fill();
+
+    if(p.life <= 0) particles.splice(i,1);
+  }
+
+  requestAnimationFrame(step);
+}
+
+function startCelebration(){
+  // show overlay
+  celebrate.style.display = "block";
+  resize();
+  running = true;
+
+  // fade-in text
+  setTimeout(()=>{ celebrateText.style.opacity = "1"; }, 200);
+
+  // start anim
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0,0,W,H);
+  requestAnimationFrame(step);
+
+  // end celebration -> show final
+  setTimeout(()=>{
+    celebrateText.style.opacity = "0";
+    running = false;
+    // small delay then final
+    setTimeout(()=>{
+      celebrate.style.display = "none";
+      final.style.display = "block";
+    }, 450);
+  }, CONFIG.celebrationMs);
+}
+</script>
+</body>
+</html>
